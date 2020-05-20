@@ -349,7 +349,7 @@ def write_to_xl_file(ref, query, pos_file):
     tol = float(pos_file.split('/')[-1].split('_')[-1].replace('.pos', ''))/2
 
 
-    with open(query[:-4] + '.xl', 'a') as f:
+    with open('constraints.map', 'a') as f:
         
         if 'Euclidean' in pos_file:
 

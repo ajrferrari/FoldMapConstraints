@@ -1,8 +1,27 @@
+Help()
+{
+echo "Extract position files from reference pdb after checking for Euclidean distances and dihedral angles patterns over list of PDBs"
+echo "A database folder is created containing such files and the reference pdb for future use to generate constraints for refinement for protein models"
+echo 
+echo "Syntax: extract_database.sh reference_pdb pdblist mapconstraints_folder lovoalign_executable"
+echo
+}
+
+while getopts ":h" option; do
+	case $option in
+		h) # display Help
+		Help
+		exit;;
+	esac
+done
+
+
 ref=$(readlink -f $1)
 pdblist=$(readlink -f $2)
-clean_pdbs=$(readlink -f /home/allan/softwares/rosetta_src_2019.35.60890_bundle/tools/protein_tools/scripts/clean_pdb.py)
-lovoalign=$(readlink -f /mnt/d/softwares/lovoalign/bin/lovoalign)
-extract_database=$(readlink -f /mnt/d/work/2020/POSTDOC/scripts/extract_database.py)
+mapconstraints=$(readlink -f $3)
+clean_pdbs=$(readlink -f $mapconstraints/src/clean_pdb.py)
+lovoalign=$( readlink -f $4 )
+extract_database=$(readlink -f $mapconstraints/src/extract_database.py)
 
 
 

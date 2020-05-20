@@ -1,9 +1,28 @@
+Help()
+{
+echo "Extract constraints file to be used in refinement of a protein model"
+echo
+echo "Syntax: extract_constraints.sh database_folder query_protein_model mapconstraints_folder lovoalign_executable"
+echo
+}
+
+while getopts ":h" option; do
+	case $option in
+		h) # display Help
+		Help
+		exit;;
+	esac
+done
+
+
+
 database=$(readlink -f $1)
 query=$(readlink -f $2)
+mapconstraints=$(readlink -f $3)
 reference=$database/reference.pdb
-clean_pdbs=$(readlink -f /home/allan/softwares/rosetta_src_2019.35.60890_bundle/tools/protein_tools/scripts/clean_pdb.py)
-lovoalign=$(readlink -f /mnt/d/softwares/lovoalign/bin/lovoalign)
-extract_constraints=$(readlink -f /mnt/d/work/2020/POSTDOC/scripts/map_constraints_reduced/extract_constraints.py)
+clean_pdbs=$(readlink -f $mapconstraints/src/clean_pdb.py)
+extract_constraints=$(readlink -f $mapconstraints/src/extract_constraints.py)
+lovoalign=$( readlink -f $4 ) 
 
 
 # Clean query pdb
@@ -19,3 +38,6 @@ $lovoalign -p1 query.pdb -p2 $reference -o query_aligned.pdb
 # Run extract constraints
 
 python3.7 $extract_constraints -database $database/ -query query_aligned.pdb
+
+# Remove unnecessary files
+rm query*pdb *fasta
