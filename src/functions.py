@@ -209,9 +209,9 @@ def get_dictionaries_of_distances_and_dihedrals(list_of_positions, pdblist, refe
 
             res1 = get_closest_residue(list_of_positions[pos][0], pdb_ref_dict, pdb_query_dict, map_res_num_to_res_name, length)
             res2 = get_closest_residue(list_of_positions[pos][1], pdb_ref_dict, pdb_query_dict, map_res_num_to_res_name, length)
-            if res1 == None or res2 == None:
+            if (res1 == None or res2 == None) or (abs(res1-res2 < 10):
                 distance_dict[pos].append(None) 
-                dihedral_dict[pos].append(None)
+                dihedral_dict[pos].append(None)	
             else:
                 try:
                     # Calculate Euclidean distance
