@@ -57,6 +57,8 @@ python3.7 $extract_database -ref reference.pdb -pdbs_list pdbs.lst
 
 mv database ..
 
+cd ..
+
 rm -r cleaned_and_aligned
 
 echo "Database creation completed"
