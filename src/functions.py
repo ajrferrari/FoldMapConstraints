@@ -251,7 +251,7 @@ def write_database(distance_dict, dihedral_dict):
         print(' ... database directory found')
     
     distance = 1    
-    while distance <= 5:
+    while distance <= 20:
         # Get list of positions
         positions_to_Euclidean = []
         avarage_value_Euclidean = []
