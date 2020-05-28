@@ -8,7 +8,7 @@ import argparse
 
 parser = argparse.ArgumentParser(description='Generate constraints from npz file')
 parser.add_argument('-fa', '--fasta', type=str, required=True, help='Fasta file')
-parser.add_argument('-npz', '--npz', type=str, required=True, help='NPZ file with encapsulated constraints')
+parser.add_argument('-npz', '--npz', type=str, required=False, help='NPZ file with encapsulated constraints')
 parser.add_argument('-gen', '--gen_rst', action='store_true', default=False, help='Generate constraints in tmp folder')
 parser.add_argument('--rst_file', type=str, required=False, help='Constraints list file containing output from gen_rst')
 parser.add_argument('-p', '--pcut', type=float, required=False, default=0.15, help='Constraints probability cutoff')
@@ -32,8 +32,9 @@ def gen_rst(npz_file, fasta_file):
     for _ in range(10):
         tmpdir += random.choice(string.ascii_letters)
 
-    tmpdir = '/tmp/' + tmpdir
+    tmpdir = './tmp/' + tmpdir
 
+    os.mkdir('tmp/')
     os.mkdir(tmpdir)
     
     print('temp folder:  ', tmpdir)
@@ -214,7 +215,6 @@ def main():
 	
 	# print('Writting constraint file ...')
 	# write_rst(rst, args.fasta, args.pcut)
-	
 	
 	print("Finished in %f minutes" % ( (time.time()-start)/60 ))
 	

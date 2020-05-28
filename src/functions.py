@@ -80,7 +80,7 @@ def calc_distance(p1, p2):
     return np.linalg.norm(p1-p2)
 
 
-def list_of_Euclidean_distances(pdbfile, max_distance=10, residue_gap=10):
+def list_of_Euclidean_distances(pdbfile, max_distance=20, residue_gap=8):
     ''' Get list of residue pairs and Euclidean distances with Euclidean distance shorter than max_distance=20A'''
     distances_CB_CB = []
     pairs_residues = generate_combinations(pdbfile) # Get residue pairs
@@ -353,7 +353,7 @@ def write_to_xl_file(ref, query, pos_file, func_type):
         exit()
 
 
-    with open('constraints.map', 'a') as f:
+    with open('constraints.map', 'w') as f:
         
         if 'Euclidean' in pos_file:
 
