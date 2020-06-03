@@ -1,4 +1,4 @@
-# MapConstraints
+# FoldMapConstraints
 
 Two modules are available: extract database and extract constraints.
 
