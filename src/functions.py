@@ -276,9 +276,13 @@ def write_database(distance_dict, dihedral_dict):
         avarage_value_Dihedrals = []
         for key in dihedral_dict:
             if dihedral_dict[key].count(None) == 0:
-                avarage = sum(dihedral_dict[key])/len(dihedral_dict[key])
-                minimum = min(dihedral_dict[key])
-                maximum = max(dihedral_dict[key])
+                angles = np.array(dihedral_dict[key])
+                angles = (2*np.pi + angles ) * (angles < 0) + (angles) * (angles >0)
+                avarage = sum(angles)/len(angles)
+                if avarage > np.pi:
+                    avarage = avarage - 2*np.pi
+                minimum = min(angles)
+                maximum = max(angles)
                 if (maximum - minimum > angle - 0.25) and (maximum - minimum <= angle):
                     positions_to_Dihedrals.append(key)
                     avarage_value_Dihedrals.append(avarage)
@@ -376,11 +380,20 @@ def write_to_xl_file(ref, query, pos_file, func_type):
                 res1 = get_closest_residue(Euclidean_distances[pos][0], pdb_ref_dict, pdb_query_dict, map_res_num_to_res_name, length)
                 res2 = get_closest_residue(Euclidean_distances[pos][1], pdb_ref_dict, pdb_query_dict, map_res_num_to_res_name, length)				
                 if (res1 != None and res2 != None) and (abs(res1-res2) >= 10):
-                    if func_type == 'LINEAR_PENALTY':
-                        f.write("Dihedral CA %i CB %i CB %i CA %i LINEAR_PENALTY %f -1.0 %f 1.0 \n" % ( res1, res1, res2, res2, avarage_value[i], tol))
-                    elif func_type == 'FLAT_HARMONIC':
-                        f.write("Dihedral CA %i CB %i CB %i CA %i FLAT_HARMONIC %f 1.0 %f\n" % ( res1, res1, res2, res2, avarage_value[i], tol))
-                    elif func_type == 'USOG':
-                        f.write("Dihedral CA %i CB %i CB %i CA %i USOGFUNC 1 %f 1.0 1.0 \n" % ( res1, res1, res2, res2, avarage_value[i] ))
+                    #if func_type == 'LINEAR_PENALTY':
+                     #   f.write("Dihedral CA %i CB %i CB %i CA %i LINEAR_PENALTY %f -1.0 %f 1.0 \n" % ( res1, res1, res2, res2, avarage_value[i], tol))
+                    #elif func_type == 'FLAT_HARMONIC':
+                    #    f.write("Dihedral CA %i CB %i CB %i CA %i FLAT_HARMONIC %f 1.0 %f\n" % ( res1, res1, res2, res2, avarage_value[i], tol))
+                    #elif func_type == 'USOG':
+                    #    f.write("Dihedral CA %i CB %i CB %i CA %i USOGFUNC 1 %f 1.0 1.0 \n" % ( res1, res1, res2, res2, avarage_value[i] ))
+                    if tol == 0.25:
+                        f.write("Dihedral CA %i CB %i CB %i CA %i CIRCULARHARMONIC %f 0.5 \n" % ( res1, res1, res2, res2, avarage_value[i] ))
+                    if tol == 0.50:
+                        f.write("Dihedral CA %i CB %i CB %i CA %i CIRCULARHARMONIC %f 0.75 \n" % ( res1, res1, res2, res2, avarage_value[i] ))
+                    if tol == 0.75:
+                        f.write("Dihedral CA %i CB %i CB %i CA %i CIRCULARHARMONIC %f 1.0 \n" % ( res1, res1, res2, res2, avarage_value[i] ))
+                    if tol == 1.0:
+                        f.write("Dihedral CA %i CB %i CB %i CA %i CIRCULARHARMONIC %f 1.25" % ( res1, res1, res2, res2, avarage_value[i] ))
+
                 i+=1
 
