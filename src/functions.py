@@ -158,7 +158,7 @@ def list_of_dihedrals(list_of_Euclidean_distances, pdbfile):
 
 
 
-def get_closest_residue(i, pdb_ref_dict, pdb_query_dict, map_res_num_to_res_name, length):
+def get_closest_residue(i, pdb_ref_dict, pdb_query_dict, map_res_num_to_res_name, length, dtol=3.0):
     """ Find the jth closest residue from the ith residue from the reference pdb """
     d = 10.
     res_i = 0
@@ -175,9 +175,9 @@ def get_closest_residue(i, pdb_ref_dict, pdb_query_dict, map_res_num_to_res_name
             if d_tmp < d:
                 d = d_tmp
                 res_i = j
-        if d < 2.0:
+        if d < 1.0:
             return res_i
-    if d < 3.0:
+    if d < dtol:
         return res_i
     else:
         return None 
@@ -333,7 +333,7 @@ def read_pos_and_avg_files(pos_file):
 		
 
 
-def write_to_xl_file(ref, query, pos_file, func_type):
+def write_to_xl_file(ref, query, pos_file, func_type, dtol=3.0):
     """ 1. Get list of positions that satisfy conditions of ddistance and ddihedral 
         2. Map closest residue of each position pair from reference residue pair from previous list
         3. Write xl file """
@@ -363,8 +363,8 @@ def write_to_xl_file(ref, query, pos_file, func_type):
 
             i=0
             for pos in positions:
-                res1 = get_closest_residue(Euclidean_distances[pos][0], pdb_ref_dict, pdb_query_dict, map_res_num_to_res_name, length)
-                res2 = get_closest_residue(Euclidean_distances[pos][1], pdb_ref_dict, pdb_query_dict, map_res_num_to_res_name, length)
+                res1 = get_closest_residue(Euclidean_distances[pos][0], pdb_ref_dict, pdb_query_dict, map_res_num_to_res_name, length, dtol)
+                res2 = get_closest_residue(Euclidean_distances[pos][1], pdb_ref_dict, pdb_query_dict, map_res_num_to_res_name, length, dtol)
                 if (res1 != None and res2 != None) and (abs(res1-res2) >= 10):
                     if func_type == 'LINEAR_PENALTY':
                         f.write("AtomPair CB %i CB %i LINEAR_PENALTY %f -1.0 %f 1.0\n" % (res1, res2, avarage_value[i], tol ))
